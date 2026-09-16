@@ -32,27 +32,42 @@ root_dir
 
 ## Setup
 
+Preferred: [uv](https://docs.astral.sh/uv/). Install uv once per machine (see
+uv's docs), then from inside the repo:
+
 ```bash
-# 1) Create a virtual environment (optional)
+uv venv                              # create a local virtual environment (.venv)
+uv pip install -r requirements.txt   # install pytest into it
+```
+
+From then on, run any Python command through `uv run` so it uses that
+environment automatically:
+
+```bash
+uv run pytest -q                            # run all tests
+uv run pytest ./tests/test_budget.py        # run budget tests only
+uv run python -m campaign_launchpad.app     # run the demo app
+```
+
+<details>
+<summary>Alternative: plain venv + pip</summary>
+
+```bash
 # Unix
 python -m venv .venv && source .venv/bin/activate
 
-# Windows: 
+# Windows:
 python -m venv .venv
 .venv\Scripts\activate
 
-# 2) Install test dependency
 pip install -r requirements.txt
 
-# 3) Testing
-# Run all tests
 python -m pytest -q
-# Run budget tests
 python -m pytest ./tests/test_budget.py
-
-# 4) Run the demo app
 python -m campaign_launchpad.app
 ```
+
+</details>
 
 ## How to submit
 
@@ -62,7 +77,7 @@ python -m campaign_launchpad.app
 2. Clone your fork and work through the exercises below on a branch, e.g.:
 
    ```bash
-   git checkout -b solution
+   git switch -c solution
    ```
 
 3. Commit your changes and push the branch to your fork:
@@ -95,8 +110,8 @@ Functional requirements:
 
 To test this part:
 
-```python
-python -m pytest ./tests/test_campaign.py
+```bash
+uv run pytest ./tests/test_campaign.py
 ```
 
 Goal --> Pass campaign tests
@@ -111,8 +126,8 @@ Functional requirements:
 
 To test this part:
 
-```python
-python -m pytest ./tests/test_budget.py
+```bash
+uv run pytest ./tests/test_budget.py
 ```
 
 Goal --> Pass budget tests
@@ -128,8 +143,8 @@ Functional requirements:
 
 To test this part:
 
-```python
-python -m pytest ./tests/test_channels.py
+```bash
+uv run pytest ./tests/test_channels.py
 ```
 
 Goal --> Pass channels tests
