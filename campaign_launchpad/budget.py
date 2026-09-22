@@ -2,13 +2,13 @@
 def singleton(cls):
     instances = {}
 
-    def get_instance(*args, **kwargs):
+    def wrapper(*args, **kwargs):
         if cls not in instances:
             instances[cls] = cls(*args, **kwargs)
         return instances[cls]
 
-    get_instance._instances = instances
-    return get_instance
+    wrapper._instances = instances
+    return wrapper
 
 
 @singleton
@@ -24,7 +24,7 @@ class GlobalBudget:
         if amount <= 0:
             raise ValueError("Allocation amount must be positive")
         if amount > self._balance:
-            raise ValueError("Insufficient budget")
+            raise ValueError("You don't have enough budget for this")
         self._balance -= amount
 
     def remaining(self) -> float:

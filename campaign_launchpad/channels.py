@@ -11,7 +11,6 @@ class ChannelClient(ABC):
 
     @abstractmethod
     def create_campaign(self, campaign: Campaign) -> str:
-        # TODO: Create a campaign on this channel and return an external id.
         pass
 
     @abstractmethod
@@ -20,10 +19,7 @@ class ChannelClient(ABC):
 
 
 class GoogleAdsClient(ChannelClient):
-    def __init__(self):
-        super().__init__("google")
-
-    def create_campaign(self, campaign: Campaign) -> str:
+    def create_campaign(self, campaign):
         GlobalBudget().allocate(campaign.daily_budget)
         return f"g-{uuid4()}"
 
@@ -32,10 +28,7 @@ class GoogleAdsClient(ChannelClient):
 
 
 class FacebookAdsClient(ChannelClient):
-    def __init__(self):
-        super().__init__("facebook")
-
-    def create_campaign(self, campaign: Campaign) -> str:
+    def create_campaign(self, campaign):
         GlobalBudget().allocate(campaign.daily_budget)
         return f"f-{uuid4()}"
 
@@ -44,14 +37,12 @@ class FacebookAdsClient(ChannelClient):
 
 
 class ChannelClientFactory:
-    _clients = {
-        "google": GoogleAdsClient,
-        "facebook": FacebookAdsClient,
-    }
-
     @staticmethod
     def create(channel: str) -> ChannelClient:
-        client_cls = ChannelClientFactory._clients.get(channel)
-        if client_cls is None:
-            raise ValueError(f"Unknown channel: {channel!r}")
-        return client_cls()
+        clients = {
+            "google": GoogleAdsClient,
+            "facebook": FacebookAdsClient,
+        }
+        if channel not in clients:
+            raise ValueError(f"Unknown channel: {channel}")
+        return clients[channel](channel)

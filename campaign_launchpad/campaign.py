@@ -58,15 +58,17 @@ class CampaignBuilder:
 
     def build(self) -> Campaign:
         if not self._name:
-            raise ValueError("name is required")
+            raise ValueError("You need a name")
         if not self._channel:
-            raise ValueError("channel is required")
+            raise ValueError("You need a channel")
         if self._daily_budget is None or self._daily_budget < 0:
-            raise ValueError("Budget must be non-negative")
+            raise ValueError("You need a budget over 0")
+        if not self._start_date:
+            raise ValueError("You need a start date")
         if self._start_date and self._end_date and self._start_date > self._end_date:
             raise ValueError("Start date must be before end date")
         if not self._creatives:
-            raise ValueError("At least one creative is required")
+            raise ValueError("You need at least one creative")
 
         campaign = Campaign(
             name=self._name,
